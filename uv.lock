@@ -3641,13 +3641,15 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "crewai", extra = ["tools"] },
+    { name = "crewai-tools" },
     { name = "pypdf2" },
     { name = "requests" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "crewai", extras = ["tools"], specifier = ">=0.177.0,<1.0.0" },
+    { name = "crewai", extras = ["tools"], specifier = ">=0.201.1,<1.0.0" },
+    { name = "crewai-tools", specifier = ">=0.75.0" },
     { name = "pypdf2", specifier = ">=3.0.0" },
     { name = "requests", specifier = ">=2.31.0" },
 ]

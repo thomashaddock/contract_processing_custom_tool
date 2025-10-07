@@ -105,7 +105,7 @@ class UniversalFileDownloaderProcessorCrew:
     def process_document_from_url(self) -> Task:
         return Task(
             config=self.tasks_config["process_document_from_url"],
-            markdown=False,
+            markdown=True,
         )
     
     @task
