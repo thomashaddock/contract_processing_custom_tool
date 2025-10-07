@@ -1,21 +1,53 @@
 ---
-process_document_from_google_drive:
+process_document_from_url:
   agent: document_processor
-  description: "Download and process the Real Estate Development Agreement document from the provided URL: {google_drive_url}. \n\nUse the PDF Download Tool to download the document from the URL (supports Google Drive and Dropbox links). The tool will automatically extract the file ID from Google Drive URLs or convert Dropbox sharing URLs to direct download links. \n\nAfter downloading, extract all readable text content from the PDF document. Focus on capturing all text content, tables, party information, financial terms, legal clauses, dates, and structured data present in the document. Ensure comprehensive extraction while maintaining document structure and readability."
-  expected_output: 'Complete extracted text content with preserved formatting and all contract details including: party names and contact information, property details, project specifications, financial terms, payment schedules, insurance requirements, legal clauses, dates, and any exhibits or schedules referenced in the Real Estate Development Agreement.'
+  description: >
+    Download and process the Real Estate Development Agreement document from the provided URL: {google_drive_url}. 
 
+    Use the PDF Download Tool to download the document from the URL (supports Google Drive and Dropbox links). The tool will automatically extract the file ID from Google Drive URLs or convert Dropbox sharing URLs to direct download links. 
+
+    After downloading, extract all readable text content from the PDF document. Focus on capturing all text content, tables, party information, financial terms, legal clauses, dates, and structured data present in the document. Ensure comprehensive extraction while maintaining document structure and readability.
+  expected_output: >
+    Complete extracted text content with preserved formatting and all contract details including: party names and contact information, property details, project specifications, financial terms, payment schedules, insurance requirements, legal clauses, dates, and any exhibits or schedules referenced in the Real Estate Development Agreement.
 
 extract_contract_fields:
   agent: contract_analyzer
-  description: "Carefully analyze the complete document content extracted by the Document Processor. Parse through all the text to identify and extract specific Real Estate Development Agreement fields with their exact values. Look for and extract: \n\n**Contract Metadata:** contract title, effective dates, terms, governing law\n**Parties:** Owner and Developer names, full addresses, contact details, representatives, legal counsel\n**Property:** property address, parcel numbers, legal descriptions, zoning\n**Project:** project name, scope, timeline, milestones, personnel, permits\n**Financial:** total budgets, developer fees, payment schedules, funding sources\n**Insurance:** coverage types, bond amounts, requirements\n**Risk & Compliance:** liability allocation, indemnification, force majeure\n**Dispute Resolution:** governing law, arbitration details, venue\n**Exhibits:** referenced schedules and attachments\n\nExtract the actual values found in the document text, not generic placeholders."
-  expected_output: 'Structured extraction with specific field categories and their actual values found in the document: contract_metadata (with real dates, terms, law), parties (with actual names, addresses, contacts), property (with real addresses, APNs), project (with actual scope, dates, personnel), financial_terms (with real amounts, schedules), insurance_and_bonds (with coverage amounts), risk_and_compliance (with actual clauses), dispute_resolution (with real procedures), and exhibits_and_schedules (with actual referenced items).'
   context:
-  - process_document_from_google_drive
+    - process_document_from_url
+  description: >
+    Carefully analyze the complete document content / text extracted by the Document Processor. Parse through all the text to identify and extract specific Real Estate Development Agreement fields with their exact values. Look for and extract: 
 
-  
+    **Contract Metadata:** contract title, effective dates, terms, governing law
+    **Parties:** Owner and Developer names, full addresses, contact details, representatives, legal counsel
+    **Property:** property address, parcel numbers, legal descriptions, zoning
+    **Project:** project name, scope, timeline, milestones, personnel, permits
+    **Financial:** total budgets, developer fees, payment schedules, funding sources
+    **Insurance:** coverage types, bond amounts, requirements
+    **Risk & Compliance:** liability allocation, indemnification, force majeure
+    **Dispute Resolution:** governing law, arbitration details, venue
+    **Exhibits:** referenced schedules and attachments
+
+    Extract the actual values found in the document text, not generic placeholders.
+  expected_output: >
+    Structured extraction with specific field categories and their actual values found in the document: contract_metadata (with real dates, terms, law), parties (with actual names, addresses, contacts), property (with real addresses, APNs), project (with actual scope, dates, personnel), financial_terms (with real amounts, schedules), insurance_and_bonds (with coverage amounts), risk_and_compliance (with actual clauses), dispute_resolution (with real procedures), and exhibits_and_schedules (with actual referenced items).
+
 generate_json_export:
   agent: json_export_specialist
-  description: "Take the structured field extractions from the Contract Analyzer and map each specific value to the exact JSON schema structure. Use the actual extracted values, not null placeholders. For each section:\n\n- **contract_metadata**: Map title, date, type, jurisdiction from extracted data\n- **parties**: Map developer and owner details (names, addresses, contacts, representatives) \n- **property**: Map description, location, parcel_number, zoning from extractions\n- **project**: Map project_name, scope, timeline, milestones, permits from data\n- **financial_terms**: Map budget, payment_schedule, funding, cost terms from extractions\n- **insurance_and_bonds**: Map insurance types, bond details from extracted requirements\n- **risk_and_compliance**: Map liability, indemnification, compliance from extracted clauses\n- **dispute_resolution**: Map governing_law, mechanisms, arbitration from extractions\n- **exhibits_and_schedules**: Map referenced documents from extracted list\n\nOnly use null if a field genuinely was not found in the contract text."
-  expected_output: 'Complete JSON dictionary with the exact schema structure where all available extracted values are properly mapped to their corresponding fields. The JSON should contain real contract data, not null values, organized in the required nested structure: contract_metadata, parties, property, project, financial_terms, insurance_and_bonds, risk_and_compliance, dispute_resolution, and exhibits_and_schedules.'
   context:
-  - extract_contract_fields
+    - extract_contract_fields
+  description: >
+    Take the structured field extractions from the Contract Analyzer and map each specific value to the exact JSON schema structure. Use the actual extracted values, not null placeholders. For each section:
+
+    - **contract_metadata**: Map title, date, type, jurisdiction from extracted data
+    - **parties**: Map developer and owner details (names, addresses, contacts, representatives) 
+    - **property**: Map description, location, parcel_number, zoning from extractions
+    - **project**: Map project_name, scope, timeline, milestones, permits from data
+    - **financial_terms**: Map budget, payment_schedule, funding, cost terms from extractions
+    - **insurance_and_bonds**: Map insurance types, bond details from extracted requirements
+    - **risk_and_compliance**: Map liability, indemnification, compliance from extracted clauses
+    - **dispute_resolution**: Map governing_law, mechanisms, arbitration from extractions
+    - **exhibits_and_schedules**: Map referenced documents from extracted list
+
+    Only use null if a field genuinely was not found in the contract text.
+  expected_output: >
+    Complete JSON dictionary with the exact schema structure where all available extracted values are properly mapped to their corresponding fields. The JSON should contain real contract data, not null values, organized in the required nested structure: contract_metadata, parties, property, project, financial_terms, insurance_and_bonds, risk_and_compliance, dispute_resolution, and exhibits_and_schedules.

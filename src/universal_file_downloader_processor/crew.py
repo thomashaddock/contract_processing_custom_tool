@@ -1,12 +1,15 @@
 import os
+import json
 
 from crewai import LLM
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import (
 	# VisionTool,
-	PDFSearchTool
+	# PDFSearchTool
+    FileReadTool
 )
+# from crewai.tools import SchemaConverter
 from .tools.custom_tool import PDFDownloadTool
 
 
@@ -22,13 +25,13 @@ class UniversalFileDownloaderProcessorCrew:
             llm=dict(
                 provider="openai",
                 config=dict(
-                    model="gpt-4.1-mini",
+                    model="gpt-3.5-turbo",
                 ),
             ),
             embedder=dict(
                 provider="openai",
                 config=dict(
-                    model="text-embedding-3-large",
+                    model="text-embedding-3-small",
                 ),
             ),
         )
@@ -37,7 +40,7 @@ class UniversalFileDownloaderProcessorCrew:
             config=self.agents_config["document_processor"],
             tools=[
 				# VisionTool(),
-				PDFSearchTool(config=embedding_config_pdfsearchtool),
+				# PDFSearchTool(config=embedding_config_pdfsearchtool),
 				PDFDownloadTool()
             ],
             reasoning=False,
@@ -48,7 +51,7 @@ class UniversalFileDownloaderProcessorCrew:
             max_rpm=None,
             max_execution_time=None,
             llm=LLM(
-                model="gpt-4.1-mini",
+                model="gpt-3.5-turbo",
                 temperature=0.7,
             ),
             
@@ -59,9 +62,7 @@ class UniversalFileDownloaderProcessorCrew:
 
         return Agent(
             config=self.agents_config["contract_analyzer"],
-            tools=[
-
-            ],
+            tools=[],
             reasoning=False,
             max_reasoning_attempts=None,
             inject_date=True,
@@ -70,7 +71,7 @@ class UniversalFileDownloaderProcessorCrew:
             max_rpm=None,
             max_execution_time=None,
             llm=LLM(
-                model="gpt-4.1-mini",
+                model="gpt-3.5-turbo",
                 temperature=0.7,
             ),
             
@@ -92,7 +93,7 @@ class UniversalFileDownloaderProcessorCrew:
             max_rpm=None,
             max_execution_time=None,
             llm=LLM(
-                model="gpt-4.1-mini",
+                model="gpt-3.5-turbo",
                 temperature=0.7,
             ),
             
@@ -101,9 +102,9 @@ class UniversalFileDownloaderProcessorCrew:
 
     
     @task
-    def process_document_from_google_drive(self) -> Task:
+    def process_document_from_url(self) -> Task:
         return Task(
-            config=self.tasks_config["process_document_from_google_drive"],
+            config=self.tasks_config["process_document_from_url"],
             markdown=False,
         )
     
@@ -133,8 +134,3 @@ class UniversalFileDownloaderProcessorCrew:
             tracing=True,
         )
 
-    def _load_response_format(self, name):
-        with open(os.path.join(self.base_directory, "config", f"{name}.json")) as f:
-            json_schema = json.loads(f.read())
-
-        return SchemaConverter.build(json_schema)
