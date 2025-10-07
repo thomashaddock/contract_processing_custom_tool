@@ -5,10 +5,10 @@ description = "universal_file_downloader_processor using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "crewai[tools]>=0.201.1,<1.0.0",
     "crewai-tools>=0.75.0",
     "requests>=2.31.0",
-    "PyPDF2>=3.0.0"
+    "PyPDF2>=3.0.0",
+    "crewai>=0.201.1",
 ]
 
 [project.scripts]
