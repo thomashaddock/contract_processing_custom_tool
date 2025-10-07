@@ -1,0 +1,25 @@
+[project]
+name = "universal_file_downloader_processor"
+version = "0.1.0"
+description = "universal_file_downloader_processor using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=0.177.0,<1.0.0",
+    "requests>=2.31.0",
+    "PyPDF2>=3.0.0"
+]
+
+[project.scripts]
+universal_file_downloader_processor = "universal_file_downloader_processor.main:run"
+run_crew = "universal_file_downloader_processor.main:run"
+train = "universal_file_downloader_processor.main:train"
+replay = "universal_file_downloader_processor.main:replay"
+test = "universal_file_downloader_processor.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
