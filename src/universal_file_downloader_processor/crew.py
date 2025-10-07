@@ -10,10 +10,7 @@ from crewai_tools import (
     FileReadTool
 )
 # from crewai.tools import SchemaConverter
-from .tools.custom_tool import PDFDownloadTool
-
-
-
+from universal_file_downloader_processor.tools.custom_tool import PDFDownloadTool
 
 @CrewBase
 class UniversalFileDownloaderProcessorCrew:
