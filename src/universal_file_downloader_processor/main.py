@@ -12,7 +12,8 @@ def run():
     Run the crew.
     """
     inputs = {
-        'google_drive_url': 'https://drive.google.com/file/d/10mKRhNLFCK-_pawRoRtyO2tPP6zBwpTm/view'
+        # 'google_drive_url': 'https://drive.google.com/file/d/10mKRhNLFCK-_pawRoRtyO2tPP6zBwpTm/view'
+        'google_drive_url': 'https://www.dropbox.com/scl/fi/x7tnq20alq1d5xczsezum/real-estate-mock-contract.pdf?rlkey=kxxxiocwcrszp42ogfir8teqs&e=1&st=145dttjk&dl=0'
     }
     UniversalFileDownloaderProcessorCrew().crew().kickoff(inputs=inputs)
 
